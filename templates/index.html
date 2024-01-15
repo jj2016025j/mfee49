@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python and JavaScript Example</title>
+</head>
+<body>
+    <h1>与 Python 交互的 JavaScript 示例</h1>
+    <button onclick="sendDataToPython()">发送数据到 Python</button>
+    <p id="result"></p>
+
+    <script>
+        async function sendDataToPython() {
+            const response = await fetch('http://localhost:5000/process_data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ value: 10 }),
+            });
+            const data = await response.json();
+            document.getElementById('result').innerText = '结果: ' + data.result;
+        }
+    </script>
+</body>
+</html>
+    
