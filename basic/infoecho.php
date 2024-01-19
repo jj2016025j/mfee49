@@ -3,4 +3,6 @@
 <?php
     echo 'Hello World';
     phpinfo();
+    var_dump(gd_info()); 
+
 ?>

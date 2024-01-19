@@ -1,4 +1,5 @@
 <?php
+//備用
 $host = 'localhost'; // 或者是數據庫服務器的IP地址
 $db   = 'test';
 $user = 'root';

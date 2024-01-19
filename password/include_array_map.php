@@ -1,5 +1,5 @@
 <?php
-include('bardapi.php');
+include('checkTaiwanID.php');
 
 $ids = array("A123456789", "R124798913", "B123456789"); // 添加更多的測試號碼
 
