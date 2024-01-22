@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            switch(xhttp.readyState){
+                case 1:
+                    document.getElementById("div1").innerHTML="1";
+                break;
+                case 2:
+                    document.getElementById("div2").innerHTML="2";
+                break;
+                case 3:
+                    document.getElementById("div3").innerHTML="3";
+                break;
+                case 4:
+                    document.getElementById("div4").innerHTML="4";
+                break;
+            }
+            console.log(xhttp)
+        }
+        function test(){
+            xhttp.open('get','ajax.php',true);
+            xhttp.send();
+        }
+    </script>
+    <input type="button" onclick="test()">
+    <div id="div1">?</div>
+    <div id="div2">?</div>
+    <div id="div3">?</div>
+    <div id="div4">?</div>
+</body>
+</html>

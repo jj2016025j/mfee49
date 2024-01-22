@@ -11,51 +11,70 @@ function createConnection($servername, $username, $password, $dbname = "", $port
     return $mysqli;
 }
 
-function createDatabase($mysqli, $dbname)
-{
-    $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
+function createDatabase($mysqli, $dbname) {
+    // 檢查數據庫連接
+    if ($mysqli->connect_error) {
+        die("連接失敗: " . $mysqli->connect_error);
+    }
+
+    $sql = "CREATE DATABASE IF NOT EXISTS `$dbname`";
+
     if ($mysqli->query($sql) === TRUE) {
-        echo "資料庫創建成功<br>";
+        echo "資料庫 '{$dbname}' 創建成功<br>";
     } else {
-        echo "創建資料庫錯誤: " . $mysqli->error . "<br>";
+        echo "創建資料庫 '{$dbname}' 錯誤: " . $mysqli->error . "<br>";
     }
 }
 
-function selectDatabase($mysqli, $dbname)
-{
+function selectDatabase($mysqli, $dbname) {
+    // 嘗試選擇（連接）到指定的數據庫
     if (!$mysqli->select_db($dbname)) {
-        die("未找到數據庫 '$dbname'");
+        die("未找到數據庫 '{$dbname}' - 錯誤信息: " . $mysqli->error);
     } else {
-        echo "找到數據庫{$dbname}";
+        echo "已成功連接到數據庫 '{$dbname}'<br>";
     }
 }
 
 //UNDO 表內類型要改
-function createTable($mysqli, $tableName)
-{
-    $sql = "CREATE TABLE IF NOT EXISTS {$tableName} (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50),
-        email VARCHAR(50)
-    )";
-    if ($mysqli->query($sql) === TRUE) {
-        echo "表 {$tableName} 創建成功<br>";
+function createTable($mysqli, $tableName) {
+    // 檢查表是否已存在
+    if (!checkTableExists($mysqli, $tableName)) {
+        // SQL語句創建表
+        $sql = "CREATE TABLE `{$tableName}` (
+            `id` INT AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(50),
+            `email` VARCHAR(50)
+        )";
+
+        if ($mysqli->query($sql) === TRUE) {
+            echo "表 '{$tableName}' 創建成功<br>";
+        } else {
+            echo "創建表 '{$tableName}' 錯誤: " . $mysqli->error . "<br>";
+        }
     } else {
-        echo "創建表 {$tableName} 錯誤: " . $mysqli->error . "<br>";
+        echo "表 '{$tableName}' 已存在<br>";
     }
 }
-
-function checkTableExists($mysqli, $tableName)
-{
+function checkTableExists($mysqli, $tableName) {
     $sql = "SHOW TABLES LIKE '{$tableName}'";
     $result = $mysqli->query($sql);
-    echo ($result->num_rows > 0);
+
+    if ($result === false) {
+        // 處理錯誤情況
+        echo "檢查表 '{$tableName}' 是否存在時出錯: " . $mysqli->error . "<br>";
+        return false;
+    }
+
+    return ($result->num_rows > 0);
 }
 
 // 使用預處理語句
 //UNDO 優化擴充功能
 function insertData($mysqli, $tableName, $name, $email)
 {
+    if (!checkTableExists($mysqli, $tableName)) {
+        die("表格 '{$tableName}' 不存在");
+    }
     try {
         $sql = $mysqli->prepare("INSERT INTO {$tableName} (name, email) VALUES (?, ?)");
         $sql->bind_param("ss", $name, $email);

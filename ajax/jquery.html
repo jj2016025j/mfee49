@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        function test() {
+            $('#id1').load("ajax.php" + $("#max").val())
+        }
+    </script>
+</head>
+
+<body>
+    <div>Random:<span id="id1"></span></div><br>
+    Max:<input type="text" name="" id="max">
+    <button onclick="test()">test</button>
+
+</body>
+
+</html>
